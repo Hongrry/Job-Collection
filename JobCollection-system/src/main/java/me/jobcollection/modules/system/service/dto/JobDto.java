@@ -10,8 +10,9 @@ import lombok.Data;
 public class JobDto {
     private Long jobId;
     private String name;
+    private Long beginTime;
     private Long deadline;
-    private boolean enable;
+    private Long courseId;
     private String courseName;
     private Long templateId;
 }

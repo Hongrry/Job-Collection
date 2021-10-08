@@ -33,7 +33,9 @@ public interface JobMapper extends BaseMapper<Job> {
                           Integer year,
                           Integer month,
                           String keyword,
-                          Boolean success);
+                          Boolean success,
+                          String courseName
+    );
 
     /**
      * 查询作业 详细
@@ -42,11 +44,4 @@ public interface JobMapper extends BaseMapper<Job> {
      * @return
      */
     JobDto queryJobDetailById(Long jobId);
-
-    IPage<JobDto> queryJobDetail(Page<JobDto> page,
-                                 Long userId,
-                                 Integer year,
-                                 Integer month,
-                                 String keyword,
-                                 String courseName);
 }

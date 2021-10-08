@@ -1,7 +1,6 @@
 package me.jobcollection.modules.system.service.impl;
 
 import cn.hutool.core.date.DateTime;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import me.jobcollection.modules.system.domain.Job;
 import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.JobVo;
 import me.jobcollection.modules.system.domain.vo.Result;
-import me.jobcollection.modules.system.mapper.JobLogMapper;
 import me.jobcollection.modules.system.mapper.JobMapper;
 import me.jobcollection.modules.system.service.JobLogService;
 import me.jobcollection.modules.system.service.JobService;
@@ -41,13 +39,16 @@ public class JobServiceImpl implements JobService {
     @Override
     public Result listJobDetail(JobQueryCriteria jobQueryCriteria) {
         Page<JobDto> page = new Page<>(jobQueryCriteria.getPage(), jobQueryCriteria.getPageSize());
-        IPage<JobDto> detail = jobMapper.queryJobDetail(page,
+
+        IPage<JobDto> detail = jobMapper.listJob(page,
                 SpringSecurityUtils.getCurrentUser().getUser().getId(),
                 jobQueryCriteria.getYear(),
                 jobQueryCriteria.getMonth(),
                 jobQueryCriteria.getKeyword(),
+                null,
                 jobQueryCriteria.getCourseName()
         );
+
         List<JobVo> jobVos = convertList(detail.getRecords(), true);
 
         HashMap<String, Object> map = new HashMap<String, Object>(2) {
@@ -70,7 +71,8 @@ public class JobServiceImpl implements JobService {
                 jobQueryCriteria.getYear(),
                 jobQueryCriteria.getMonth(),
                 jobQueryCriteria.getKeyword(),
-                jobQueryCriteria.getSuccess());
+                jobQueryCriteria.getSuccess(),
+                null);
     }
 
     @Override
@@ -118,6 +120,8 @@ public class JobServiceImpl implements JobService {
         String s = new DateTime(job.getDeadline()).toString("yyyy-MM-dd HH:mm");
         jobVo.setDeadline(s);
 
+         s = new DateTime(job.getBeginTime()).toString("yyyy-MM-dd HH:mm");
+        jobVo.setBeginTime(s);
         jobVo.setJobName(job.getName());
         // 获取当前学号
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

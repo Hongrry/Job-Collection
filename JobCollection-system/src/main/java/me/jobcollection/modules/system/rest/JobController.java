@@ -63,6 +63,4 @@ public class JobController {
         }
         return Result.success(null);
     }
-
-
 }

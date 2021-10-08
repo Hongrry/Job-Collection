@@ -1,6 +1,7 @@
 package me.jobcollection.modules.system.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -14,7 +15,10 @@ import lombok.Data;
 public class Job {
     @TableId(value = "job_id", type = IdType.AUTO)
     private Long jobId;
-    private String name;
+    @TableField("name")
+    private String jobName;
+    private Long beginTime;
     private Long deadline;
+    private Long courseId;
     private Long templateId;
 }

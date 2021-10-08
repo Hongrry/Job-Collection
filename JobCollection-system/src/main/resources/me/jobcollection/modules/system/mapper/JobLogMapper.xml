@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.jobcollection.modules.system.mapper.JobLogMapper">
+
+    <select id="listJobLogDetail" resultType="me.jobcollection.modules.system.service.dto.JobLogDetail">
+        SELECT job_logs.*, sys_job.`name` as jobName
+        FROM `job_logs`,
+        `sys_job`
+        <where>
+            job_logs.user_id = #{userId}
+            AND job_logs.job_id = sys_job.job_id
+            <if test="year !=null and month != null and day !=null">
+                AND (FROM_UNIXTIME(job_logs.date/ 1000, '%m') = #{month}
+                AND FROM_UNIXTIME(job_logs.date/ 1000, '%Y') = #{year}
+                AND FROM_UNIXTIME(job_logs.date/ 1000, '%e') = #{day})
+            </if>
+            <if test="success != null">
+                AND job_logs.success=#{success}
+            </if>
+            <if test="keyword != null">
+                AND sys_job.`name` LIKE concat('%',#{keyword},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.jobcollection.modules.system.mapper.JobMapper">
+    <select id="queryJobDetailById" resultType="me.jobcollection.modules.system.service.dto.JobDto">
+        SELECT sys_job.*, sys_course.course_name
+        FROM sys_job,
+             sys_job_course,
+             sys_course
+        WHERE sys_job.job_id = #{jobId}
+          AND sys_job.job_id = sys_job_course.job_id
+          AND sys_job_course.course_id = sys_course.course_id
+    </select>
+    <select id="listJob" resultType="me.jobcollection.modules.system.service.dto.JobDto">
+        SELECT sys_job.*, sys_course.course_name
+        FROM sys_job,
+        sys_user_job,
+        sys_job_course,
+        sys_course
+        <where>
+            sys_user_job.user_id = #{userId}
+            AND sys_user_job.job_id = sys_job.job_id
+            AND sys_job.job_id = sys_job_course.job_id
+            AND sys_job_course.course_id = sys_course.course_id
+
+            <if test="year != null and month != null ">
+                AND (FROM_UNIXTIME(sys_job.deadline / 1000, '%m') = #{month}
+                AND FROM_UNIXTIME(sys_job.deadline / 1000, '%Y') = #{year})
+            </if>
+            <if test="keyword != null">
+                AND sys_job.`name` LIKE concat('%',#{keyword},'%')
+            </if>
+            <if test="success == true">
+                AND (SELECT count(*)
+                FROM `job_logs`
+                WHERE job_logs.job_id = sys_job.job_id) !=0
+            </if>
+            <if test="success == false">
+                AND (SELECT count(*)
+                FROM `job_logs`
+                WHERE job_logs.job_id = sys_job.job_id) =0
+            </if>
+        </where>
+    </select>
+    <select id="queryJobDetail" resultType="me.jobcollection.modules.system.service.dto.JobDto">
+        SELECT sys_job.*, sys_course.course_name
+        FROM sys_job,
+        sys_user_job,
+        sys_course,
+        sys_job_course
+        <where>
+            sys_user_job.user_id = #{userId}
+            AND sys_user_job.job_id = sys_job.job_id
+            AND sys_job_course.job_id = sys_job.job_id
+            AND sys_course.course_id = sys_job_course.course_id
+
+            <if test="year != null and month != null ">
+                AND (FROM_UNIXTIME(sys_job.deadline / 1000, '%m') = #{month}
+                AND FROM_UNIXTIME(sys_job.deadline / 1000, '%Y') = #{year})
+            </if>
+
+            <if test="keyword != null">
+                AND sys_job.`name` LIKE concat('%',#{keyword},'%')
+            </if>
+            <if test="courseName != null">
+                AND sys_course.course_name=#{courseName}
+            </if>
+        </where>
+    </select>
+</mapper>

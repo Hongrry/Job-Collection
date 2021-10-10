@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 /**
@@ -27,15 +28,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public JwtUserDto loadUserByUsername(String username) throws UsernameNotFoundException {
-        JwtUserDto jwtUserDto = userCache.get(username);
-        if (jwtUserDto != null) {
-            return jwtUserDto;
-        }
+
         UserDto user = userService.findUserByAccount(username);
         if (user == null) {
             throw new UsernameNotFoundException("账号不存在");
         }
-        return new JwtUserDto(user, Collections.emptyList());
+        List<GrantedAuthority> objects = new LinkedList<>();
+        if ("1190113189".equals(username)) {
+            SimpleGrantedAuthority admin = new SimpleGrantedAuthority("admin");
+            objects.add(admin);
+        }
+
+        return new JwtUserDto(user, objects);
     }
 
 }

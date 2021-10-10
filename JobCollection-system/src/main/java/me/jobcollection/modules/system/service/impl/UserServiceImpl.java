@@ -13,6 +13,7 @@ import me.jobcollection.modules.system.service.dto.UserDto;
 import me.jobcollection.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,6 +92,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto convert(User user) {
+        if (user==null){
+            throw new UsernameNotFoundException("账号不存在");
+        }
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(user, userDto);
         return userDto;

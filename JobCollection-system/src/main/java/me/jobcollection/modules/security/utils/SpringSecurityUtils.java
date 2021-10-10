@@ -1,6 +1,7 @@
 package me.jobcollection.modules.security.utils;
 
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
+import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.service.dto.UserDto;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,9 @@ public class SpringSecurityUtils {
      */
     public static JwtUserDto getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new BadRequestException("未登录");
+        }
         return (JwtUserDto) authentication.getPrincipal();
     }
 

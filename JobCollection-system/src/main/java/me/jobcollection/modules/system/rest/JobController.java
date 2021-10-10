@@ -1,20 +1,17 @@
 package me.jobcollection.modules.system.rest;
 
 import lombok.RequiredArgsConstructor;
+import me.jobcollection.modules.security.service.dto.JwtUserDto;
+import me.jobcollection.modules.security.utils.SpringSecurityUtils;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
-import me.jobcollection.modules.system.domain.vo.JobLogVo;
 import me.jobcollection.modules.system.domain.vo.Result;
-import me.jobcollection.modules.system.service.EmailService;
-import me.jobcollection.modules.system.service.FileService;
-import me.jobcollection.modules.system.service.JobLogService;
-import me.jobcollection.modules.system.service.JobService;
+import me.jobcollection.modules.system.exception.BadRequestException;
+import me.jobcollection.modules.system.service.*;
 import me.jobcollection.modules.system.service.dto.JobDto;
 import me.jobcollection.modules.system.service.dto.JobLogDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 /**
  * @author Hongrry
@@ -47,20 +44,22 @@ public class JobController {
      */
     @PostMapping("submitJob")
     public Result submitJob(@Validated @RequestBody JobLogDto jobLogDto) {
-        // 查询作业的详细
-        JobDto jobDto = jobService.queryJobDetailById(jobLogDto.getJobId());
+        // 当前用户
+        JwtUserDto currentUser = SpringSecurityUtils.getCurrentUser();
+        jobService.submitJob(jobLogDto, currentUser);
+        return Result.success(null);
+    }
 
-        // 作业是否截止
-        if (jobDto.getDeadline() > System.currentTimeMillis()) {
-            // 处理文件
-            String newPath = fileService.handleFile(jobDto, jobLogDto.getFileUrl());
-            // 更新数据库
-            jobLogService.addSuccessLog(jobDto.getJobId(), newPath);
-            // 邮件通知
-            EmailVo emailVo = jobLogService.sendEmail(jobLogDto.getJobId(), newPath);
-            emailService.send(emailVo);
+    @PostMapping("publishJob")
+    public Result publishJob(@RequestBody JobDto jobDto) {
+        JwtUserDto currentUser = SpringSecurityUtils.getCurrentUser();
 
+        if (currentUser == null || currentUser.getAuthorities().size() == 0) {
+            throw new BadRequestException("非法访问");
         }
+        // 更新
+        jobService.publishJob(jobDto);
+        // 关联
         return Result.success(null);
     }
 }

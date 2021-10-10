@@ -1,5 +1,13 @@
 #配置数据源
 spring:
+  redis:
+    #数据库索引
+    database: ${REDIS_DB:0}
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PWD:}
+    #连接超时时间
+    timeout: 5000
   datasource:
     druid:
       db-type: com.alibaba.druid.pool.DruidDataSource
@@ -94,7 +102,7 @@ mail:
   host: smtp.exmail.qq.com
   port: 465
   user: ADMIN
-  pass: HCjh92qUikkkM39H
+  pass: WWdb7nosuDFTRBEx
   from-user: 1190113189@zust.edu.cn
 file:
   linux: /home/temp/file/

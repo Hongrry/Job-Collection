@@ -44,4 +44,12 @@ public interface JobMapper extends BaseMapper<Job> {
      * @return
      */
     JobDto queryJobDetailById(Long jobId);
+
+    /**
+     * 更新关联
+     *
+     * @param deptId
+     * @param jobId
+     */
+    void addJobToDept(Long deptId, Long jobId);
 }

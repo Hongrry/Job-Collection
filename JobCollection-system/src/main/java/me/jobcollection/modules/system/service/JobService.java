@@ -1,13 +1,13 @@
 package me.jobcollection.modules.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.domain.Job;
-import me.jobcollection.modules.system.domain.vo.JobVo;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.service.dto.JobDto;
+import me.jobcollection.modules.system.service.dto.JobLogDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
-
-import java.util.List;
+import org.springframework.scheduling.annotation.Async;
 
 /**
  * @author Hongrry
@@ -52,4 +52,19 @@ public interface JobService {
      * @return
      */
     JobDto queryJobDetailById(Long jobId);
+
+    /**
+     * 发布新的作业
+     *
+     * @param jobDto
+     */
+    void publishJob(JobDto jobDto);
+
+    /**
+     * 提交作业
+     *
+     * @param jobLogDto
+     */
+    @Async("taskExecutor")
+    void submitJob(JobLogDto jobLogDto, JwtUserDto currentUser);
 }

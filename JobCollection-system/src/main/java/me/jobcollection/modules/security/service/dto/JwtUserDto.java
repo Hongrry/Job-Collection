@@ -7,6 +7,8 @@ import lombok.Data;
 import me.jobcollection.modules.system.service.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,8 +20,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class JwtUserDto implements UserDetails {
     private final UserDto user;
-    @JSONField(serialize = false)
+
     private final List<GrantedAuthority> authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
     @JSONField(serialize = false)
     public Set<String> getRoles() {

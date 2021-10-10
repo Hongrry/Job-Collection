@@ -4,7 +4,7 @@
 <mapper namespace="me.jobcollection.modules.system.mapper.JobLogMapper">
 
     <select id="listJobLogDetail" resultType="me.jobcollection.modules.system.service.dto.JobLogDetail">
-        SELECT job_logs.*, sys_job.`name` as jobName
+        SELECT job_logs.*, sys_job.`job_name`
         FROM `job_logs`,
         `sys_job`
         <where>
@@ -19,7 +19,7 @@
                 AND job_logs.success=#{success}
             </if>
             <if test="keyword != null">
-                AND sys_job.`name` LIKE concat('%',#{keyword},'%')
+                AND sys_job.`job_name` LIKE concat('%',#{keyword},'%')
             </if>
         </where>
     </select>

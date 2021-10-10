@@ -34,6 +34,7 @@ public class EmailServiceImpl implements EmailService {
         account.setHost(properties.getHost());
         account.setPort(Integer.parseInt(properties.getPort()));
         account.setAuth(true);
+        account.setSocketFactoryFallback(true);
         account.setPass(properties.getPass());
         account.setFrom(properties.getUser() + "<" + properties.getFromUser() + ">");
         // ssl方式发送
@@ -43,6 +44,7 @@ public class EmailServiceImpl implements EmailService {
         String content = emailVo.getContent();
         // 发送
         try {
+            log.info("success");
             int size = emailVo.getTos().size();
             Mail.create(account)
                     .setTos(emailVo.getTos().toArray(new String[size]))

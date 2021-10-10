@@ -2,6 +2,10 @@
 <!--MyBatis配置文件-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.jobcollection.modules.system.mapper.JobMapper">
+    <insert id="addJobToDept">
+        insert into sys_dept_job
+        values (#{deptId}, #{jobId});
+    </insert>
     <select id="queryJobDetailById" resultType="me.jobcollection.modules.system.service.dto.JobDto">
         SELECT sys_job.*, sys_course.course_name
         FROM sys_job,
@@ -29,7 +33,7 @@
                 AND FROM_UNIXTIME(sys_job.deadline / 1000, '%Y') = #{year})
             </if>
             <if test="keyword != null">
-                AND sys_job.`name` LIKE concat('%',#{keyword},'%')
+                AND sys_job.`job_name` LIKE concat('%',#{keyword},'%')
             </if>
             <if test="success == true">
                 AND (SELECT count(*)

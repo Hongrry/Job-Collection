@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -24,6 +25,12 @@ import org.springframework.web.cors.CorsUtils;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final LoginFilter loginFilter;
+
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        // 去除 ROLE_ 前缀
+        return new GrantedAuthorityDefaults("");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 指定某些接口不需要通过验证即可访问。登陆、注册接口肯定是不需要认证的
                 .antMatchers("/auth/login", "register").permitAll()
                 // 这里意思是其它所有接口需要认证才能访问
-
                 .anyRequest().authenticated()
                 // 指定认证错误处理器
                 .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint());

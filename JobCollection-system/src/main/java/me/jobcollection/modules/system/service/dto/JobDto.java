@@ -9,10 +9,11 @@ import lombok.Data;
 @Data
 public class JobDto {
     private Long jobId;
-    private String name;
+    private String jobName;
     private Long beginTime;
     private Long deadline;
     private Long courseId;
     private String courseName;
     private Long templateId;
+    private Long deptId;
 }

@@ -1,5 +1,6 @@
 package me.jobcollection.modules.system.service;
 
+import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobLogVo;
@@ -26,12 +27,11 @@ public interface JobLogService {
     JobLog queryJobLog(Long userId, Long jobId, boolean isSuccess);
 
     /**
-     * 提交文件
-     *
      * @param jobId
      * @param newPath
+     * @param currentUser
      */
-    void addSuccessLog(Long jobId, String newPath);
+    void addSuccessLog(Long jobId, String newPath, JwtUserDto currentUser);
 
     /**
      * @param jobLogQueryCriteria
@@ -46,7 +46,7 @@ public interface JobLogService {
      * @param path
      * @return
      */
-    EmailVo sendEmail(Long jobId, String path);
+    EmailVo sendEmail(Long jobId, String path, JwtUserDto currentUser);
 
     /**
      * 添加错误记录

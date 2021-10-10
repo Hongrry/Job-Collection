@@ -1,9 +1,11 @@
 package me.jobcollection.modules.system.service;
 
+import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.service.dto.JobDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * @author Hongrry
@@ -29,11 +31,11 @@ public interface FileService {
     void upload(File file, String fileName, Long jobId);
 
     /**
-     * 处理文件 分类 命名
      *
      * @param jobDto
      * @param url
-     * @return string
+     * @param currentUser
+     * @return
      */
-    String handleFile(JobDto jobDto, String url);
+    String handleFile(JobDto jobDto, String url, JwtUserDto currentUser);
 }

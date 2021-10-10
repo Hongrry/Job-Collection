@@ -15,7 +15,7 @@ import lombok.Data;
 public class Job {
     @TableId(value = "job_id", type = IdType.AUTO)
     private Long jobId;
-    @TableField("name")
+    @TableField("job_name")
     private String jobName;
     private Long beginTime;
     private Long deadline;

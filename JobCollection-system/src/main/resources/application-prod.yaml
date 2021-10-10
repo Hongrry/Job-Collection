@@ -1,48 +1,53 @@
-#配置数据源
+# 数据源配置
 spring:
+  redis:
+    #数据库索引
+    database: ${REDIS_DB:0}
+    host: ${REDIS_HOST:172.18.0.2}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PWD:}
+    #连接超时时间
+    timeout: 5000
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
     druid:
-      db-type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: com.mysql.cj.jdbc.Driver
-
-      url: jdbc:mysql://${DB_HOST:hongrry0420.mysql.rds.aliyuncs.com}:${DB_PORT:3306}/${DB_NAME:job_collection}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-      username: ${DB_USER:root}
-      password: ${DB_PWD:Mu^Xu2FbQX9TDr}
+      url: jdbc:mysql://hongrry0420.mysql.rds.aliyuncs.com:3306/job_collection?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: Mu^Xu2FbQX9TDr
       # 初始连接数
-      initial-size: 5
-      # 最小连接数
-      min-idle: 15
-      # 最大连接数
-      max-active: 30
-      # 超时时间(以秒数为单位)
-      remove-abandoned-timeout: 180
-      # 获取连接超时时间
-      max-wait: 3000
-      # 连接有效性检测时间
-      time-between-eviction-runs-millis: 60000
-      # 连接在池中最小生存的时间
-      min-evictable-idle-time-millis: 300000
-      # 连接在池中最大生存的时间
-      max-evictable-idle-time-millis: 900000
-      # 指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除
-      test-while-idle: true
-      # 指明是否在从池中取出连接前进行检验,如果检验失败, 则从池中去除连接并尝试取出另一个
-      test-on-borrow: true
-      # 是否在归还到池中前进行检验
-      test-on-return: false
-      # 检测连接是否有效
-      validation-query: select 1
-      # 配置监控统计
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
       webStatFilter:
         enabled: true
-      stat-view-servlet:
+      statViewServlet:
         enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
         url-pattern: /druid/*
-        reset-enable: false
+        # 控制台管理用户名和密码
+        login-username: root
+        login-password: 123456
       filter:
         stat:
           enabled: true
-          # 记录慢SQL
+          # 慢SQL记录
           log-slow-sql: true
           slow-sql-millis: 1000
           merge-sql: true
@@ -94,14 +99,14 @@ jwt:
 mail:
   host: smtp.exmail.qq.com
   port: 465
-  user: ADMIN
-  pass: HCjh92qUikkkM39H
+  user: 1190113189@zust.edu.cn
+  pass: 2LycFUiRbimR4m37
   from-user: 1190113189@zust.edu.cn
 file:
   linux: /home/temp/file/
   windows: D:\temp\file\
   base-access-path: https://cloud.miooim.cn/Job/
-  base-upload-path: /Job/
+  base-upload-path: /home/Job/
   support-suffix:
     - zip
     - doc

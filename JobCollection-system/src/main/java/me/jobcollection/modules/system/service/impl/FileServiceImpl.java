@@ -13,12 +13,15 @@ import me.jobcollection.modules.system.exception.JobSubmitException;
 import me.jobcollection.modules.system.mapper.TemplateMapper;
 import me.jobcollection.modules.system.service.FileService;
 import me.jobcollection.modules.system.service.dto.JobDto;
+import me.jobcollection.modules.system.service.dto.UserDto;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -53,6 +56,10 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
             throw new FileException("文件上传错误");
         }
+        UserDto user = SpringSecurityUtils.getCurrentUser().getUser();
+
+        // 添加到数据库
+        log.info(user.getUsername() + user.getNickname() + "提交的文件" + "{}", path);
         return path;
     }
 
@@ -74,28 +81,33 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String handleFile(JobDto jobDto, String url) {
+    public String handleFile(JobDto jobDto, String url, JwtUserDto currentUser) {
         // 根据 job id 查询 命名模板
         String template = templateMapper.selectById(jobDto.getTemplateId()).getTemplate();
 
         // 修改作业名
-        JwtUserDto currentUser = SpringSecurityUtils.getCurrentUser();
         template = template
-                .replace("JOBNAME", jobDto.getName())
+                .replace("JOBNAME", jobDto.getJobName())
                 .replace("NICKNAME", currentUser.getUser().getNickname())
                 .replace("USERNAME", currentUser.getUsername());
 
         // 获取后缀
         String suffix = StringUtils.substringAfterLast(url, ".");
-        if (StringUtils.isEmpty(suffix)) {
-            throw new JobSubmitException(jobDto.getJobId(), "非法提交, 请重新上传文件");
-        }
         // 构建目录
-        String dir = jobDto.getCourseName() + "/" + jobDto.getName() + "/";
+        String dir = jobDto.getCourseName() + "/" + jobDto.getJobName() + "/";
 
         String newPath = dir + template + "." + suffix;
         File file = new File(fileProperties.getPath() + url);
-        upload(file, newPath, jobDto.getJobId());
+        File newFile = new File(fileProperties.getBaseUploadPath() + newPath);
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        FileUtil.writeFromStream(fileInputStream, newFile);
+
+        // upload(file, newPath, jobDto.getJobId());
         return newPath;
     }
 }

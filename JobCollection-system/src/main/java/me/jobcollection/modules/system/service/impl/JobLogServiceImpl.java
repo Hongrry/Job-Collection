@@ -54,13 +54,13 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public void addSuccessLog(Long jobId, String newPath) {
+    public void addSuccessLog(Long jobId, String newPath, JwtUserDto currentUser) {
         JobLog jobLog = new JobLog();
         jobLog.setJobId(jobId);
         jobLog.setDate(System.currentTimeMillis());
         jobLog.setAddress(newPath);
         jobLog.setSuccess(true);
-        jobLog.setUserId(SpringSecurityUtils.getCurrentUser().getUser().getId());
+        jobLog.setUserId(currentUser.getUser().getId());
         jobLogMapper.insert(jobLog);
     }
 
@@ -92,14 +92,14 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public EmailVo sendEmail(Long jobId, String path) {
+    public EmailVo sendEmail(Long jobId, String path, JwtUserDto currentUser) {
         JobDto jobDto = jobMapper.queryJobDetailById(jobId);
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
         Template template = engine.getTemplate("email/taskAlarm.ftl");
         String content = template.render(Dict.create()
                 .set("CourseName", jobDto.getCourseName())
-                .set("JobName", jobDto.getName()));
-        UserDto user = SpringSecurityUtils.getCurrentUser().getUser();
+                .set("JobName", jobDto.getJobName()));
+        UserDto user = currentUser.getUser();
         EmailVo emailVo = new EmailVo(Collections.singletonList(user.getEmail()), "提交作业", content);
         return emailVo;
     }
@@ -131,7 +131,7 @@ public class JobLogServiceImpl implements JobLogService {
         jobLogVo.setDate(s);
 
         JobDto jobDto = jobMapper.queryJobDetailById(jobLogDetail.getJobId());
-        jobLogVo.setJobName(jobDto.getName());
+        jobLogVo.setJobName(jobDto.getJobName());
         jobLogVo.setCourseName(jobDto.getCourseName());
         return jobLogVo;
     }

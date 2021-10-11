@@ -48,7 +48,7 @@ public class AuthorizationController {
 
         /* 创建token */
         JwtUserDto principal = (JwtUserDto) authentication.getPrincipal();
-        String token = tokenService.createToken(principal);
+        String token = tokenService.createToken(principal, authUser.getRememberMe());
 
         HashMap<String, String> res = new HashMap<String, String>(3) {
             {

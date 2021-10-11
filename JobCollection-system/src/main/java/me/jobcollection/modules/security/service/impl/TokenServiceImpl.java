@@ -35,9 +35,13 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public String createToken(JwtUserDto jwtUserDto) {
+    public String createToken(JwtUserDto jwtUserDto, Boolean rememberMe) {
         String token = JwtUtils.createToken(jwtUserDto.getUser().getId());
-        redisUtils.set("TOKEN_" + token, jwtUserDto, 7, TimeUnit.DAYS);
+        if (rememberMe) {
+            redisUtils.set("TOKEN_" + token, jwtUserDto, 7, TimeUnit.DAYS);
+        } else {
+            redisUtils.set("TOKEN_" + token, jwtUserDto, 1, TimeUnit.HOURS);
+        }
         return token;
     }
 

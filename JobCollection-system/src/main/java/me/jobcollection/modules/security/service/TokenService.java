@@ -25,7 +25,7 @@ public interface TokenService {
      * @return
      * @throws JsonProcessingException
      */
-    String createToken(JwtUserDto jwtUserDto) throws JsonProcessingException;
+    String createToken(JwtUserDto jwtUserDto, Boolean rememberMe) throws JsonProcessingException;
 
     /**
      * 删除token

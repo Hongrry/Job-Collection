@@ -6,7 +6,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   profiles:
-    active: prod
+    active: dev
   jackson:
     time-zone: GMT+8
   data:

@@ -1,5 +1,6 @@
 package me.jobcollection.modules.system.rest;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SpringSecurityUtils;
@@ -13,6 +14,8 @@ import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 /**
  * @author Hongrry
  * @create 2021-10-04 15:38
@@ -22,17 +25,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("job")
 public class JobController {
     private final JobService jobService;
-    private final FileService fileService;
-    private final JobLogService jobLogService;
-    private final EmailService emailService;
 
-    @GetMapping
+    @GetMapping("listJob")
     public Result listJob(JobQueryCriteria criteria) {
-        return jobService.listJobDetail(criteria);
+        IPage<JobDto> page = jobService.listJobDetail(criteria);
+
+        HashMap<String, Object> map = new HashMap<String, Object>(2) {
+            {
+                put("total", page.getTotal());
+                put("list", page.getRecords());
+            }
+        };
+        return Result.success(map);
+    }
+
+    @GetMapping("listJobByUserId")
+    public Result listJobDetailByUserId(JobQueryCriteria criteria) {
+        return jobService.listJobDetailByUserId(criteria);
     }
 
 
-    @GetMapping("/listJob")
+    @GetMapping("/listUserJobByMonth")
     public Result listUserJobByMonth(JobQueryCriteria criteria) {
         return jobService.listUserJobByMonth(criteria);
     }

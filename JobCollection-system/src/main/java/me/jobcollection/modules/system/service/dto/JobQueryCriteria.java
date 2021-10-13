@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 public class JobQueryCriteria {
     private int page = 1;
     private int pageSize = 10;
+    private Long userId;
     private Integer month;
     private Integer year;
     private Boolean success;

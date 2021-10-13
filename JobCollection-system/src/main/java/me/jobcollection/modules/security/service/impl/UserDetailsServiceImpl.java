@@ -9,6 +9,7 @@ import net.sf.jsqlparser.statement.select.KSQLWindow;
 import net.sf.jsqlparser.util.validation.metadata.NamedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,8 +36,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         List<GrantedAuthority> objects = new LinkedList<>();
         if ("1190113189".equals(username)) {
-            SimpleGrantedAuthority admin = new SimpleGrantedAuthority("admin");
-            objects.add(admin);
+
+            objects = AuthorityUtils.commaSeparatedStringToAuthorityList("admin");
         }
 
         return new JwtUserDto(user, objects);

@@ -43,29 +43,35 @@ public class JobServiceImpl implements JobService {
     private final EmailService emailService;
 
     @Override
-    public Result listJobDetail(JobQueryCriteria jobQueryCriteria) {
+    public IPage<JobDto> listJobDetail(JobQueryCriteria jobQueryCriteria) {
         Page<JobDto> page = new Page<>(jobQueryCriteria.getPage(), jobQueryCriteria.getPageSize());
 
         IPage<JobDto> detail = jobMapper.listJob(page,
-                SpringSecurityUtils.getCurrentUser().getUser().getId(),
+                jobQueryCriteria.getUserId(),
                 jobQueryCriteria.getYear(),
                 jobQueryCriteria.getMonth(),
                 jobQueryCriteria.getKeyword(),
-                null,
+                jobQueryCriteria.getSuccess(),
                 jobQueryCriteria.getCourseName()
         );
+        return detail;
+    }
+
+    @Override
+    public Result listJobDetailByUserId(JobQueryCriteria jobQueryCriteria) {
+        jobQueryCriteria.setUserId(SpringSecurityUtils.getCurrentUser().getUser().getId());
+
+        IPage<JobDto> detail = listJobDetail(jobQueryCriteria);
 
         List<JobVo> jobVos = convertList(detail.getRecords(), true);
 
         HashMap<String, Object> map = new HashMap<String, Object>(2) {
             {
-                put("total", page.getTotal());
+                put("total", detail.getTotal());
                 put("list", jobVos);
             }
         };
-
         return Result.success(map);
-
     }
 
     @Override
@@ -153,11 +159,6 @@ public class JobServiceImpl implements JobService {
         BeanUtils.copyProperties(job, jobVo);
 
         // 转换时间格式
-        String s = new DateTime(job.getDeadline()).toString("yyyy-MM-dd HH:mm");
-        jobVo.setDeadline(s);
-
-        s = new DateTime(job.getBeginTime()).toString("yyyy-MM-dd HH:mm");
-        jobVo.setBeginTime(s);
         jobVo.setJobName(job.getJobName());
         // 获取当前学号
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

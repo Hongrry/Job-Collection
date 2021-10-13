@@ -16,10 +16,20 @@ import org.springframework.scheduling.annotation.Async;
 public interface JobService {
 
     /**
+     * 查询所有的作业
+     *
      * @param jobQueryCriteria
      * @return
      */
-    Result listJobDetail(JobQueryCriteria jobQueryCriteria);
+    IPage<JobDto> listJobDetail(JobQueryCriteria jobQueryCriteria);
+
+    /**
+     * 根据 id 查询用户的作业
+     *
+     * @param jobQueryCriteria
+     * @return
+     */
+    Result listJobDetailByUserId(JobQueryCriteria jobQueryCriteria);
 
     /**
      * 根据 条件 查询作业
@@ -36,6 +46,7 @@ public interface JobService {
      * @return
      */
     Result listUserJobByMonth(JobQueryCriteria jobQueryCriteria);
+
 
     /**
      * 根据 id 查询 job
@@ -64,6 +75,7 @@ public interface JobService {
      * 提交作业
      *
      * @param jobLogDto
+     * @param currentUser
      */
     @Async("taskExecutor")
     void submitJob(JobLogDto jobLogDto, JwtUserDto currentUser);

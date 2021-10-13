@@ -26,11 +26,6 @@ import org.springframework.web.cors.CorsUtils;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final LoginFilter loginFilter;
 
-    @Bean
-    GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        // 去除 ROLE_ 前缀
-        return new GrantedAuthorityDefaults("");
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -48,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 // 指定某些接口不需要通过验证即可访问。登陆、注册接口肯定是不需要认证的
                 .antMatchers("/auth/login", "register").permitAll()
+                .antMatchers("/auth/admin").hasAnyAuthority("admin")
                 // 这里意思是其它所有接口需要认证才能访问
                 .anyRequest().authenticated()
                 // 指定认证错误处理器

@@ -15,6 +15,7 @@
     </select>
     <select id="listJob" resultType="me.jobcollection.modules.system.service.dto.JobDto">
         SELECT
+        DISTINCT
         sys_job.*,
         sys_course.course_name
         FROM
@@ -23,11 +24,12 @@
         sys_job,
         sys_course
         <where>
-            sys_dept_user.user_id=#{userId}
             AND sys_dept_user.dept_id=sys_dept_job.dept_id
             AND sys_dept_job.job_id=sys_job.job_id
             AND sys_job.course_id=sys_course.course_id
-
+            <if test="userId != null">
+                AND sys_dept_user.user_id=#{userId}
+            </if>
             <if test="year != null and month != null ">
                 AND (FROM_UNIXTIME(sys_job.deadline / 1000, '%m') = #{month}
                 AND FROM_UNIXTIME(sys_job.deadline / 1000, '%Y') = #{year})

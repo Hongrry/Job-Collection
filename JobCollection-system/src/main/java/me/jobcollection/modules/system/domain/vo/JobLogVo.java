@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class JobLogVo {
     private Long logId;
-    private String date;
+    private Long date;
     private Boolean success;
     private String description;
     private String courseName;

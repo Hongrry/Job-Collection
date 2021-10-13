@@ -127,8 +127,6 @@ public class JobLogServiceImpl implements JobLogService {
     private JobLogVo convert(JobLogDetail jobLogDetail) {
         JobLogVo jobLogVo = new JobLogVo();
         BeanUtils.copyProperties(jobLogDetail, jobLogVo);
-        String s = new DateTime(jobLogDetail.getDate()).toString("yyyy-MM-dd HH:mm");
-        jobLogVo.setDate(s);
 
         JobDto jobDto = jobMapper.queryJobDetailById(jobLogDetail.getJobId());
         jobLogVo.setJobName(jobDto.getJobName());

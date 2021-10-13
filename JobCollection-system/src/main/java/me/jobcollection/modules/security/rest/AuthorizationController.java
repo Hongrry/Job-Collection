@@ -65,4 +65,9 @@ public class AuthorizationController {
         SecurityContextHolder.clearContext();
         return Result.success(null);
     }
+
+    @PostMapping("admin")
+    public Result admin() {
+        return Result.success(null);
+    }
 }

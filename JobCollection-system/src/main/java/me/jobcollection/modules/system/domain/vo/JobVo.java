@@ -10,8 +10,8 @@ import lombok.Data;
 public class JobVo {
     private Long jobId;
     private String jobName;
-    private String beginTime;
-    private String deadline;
+    private Long beginTime;
+    private Long deadline;
     private String desc;
     private Integer status;
     private String courseName;

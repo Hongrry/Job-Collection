@@ -10,4 +10,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface DeptMapper extends BaseMapper<Dept> {
+
+    /**
+     *
+     * @param jobId
+     * @return
+     */
+    Dept queryJobDeptByJobId(Long jobId);
 }

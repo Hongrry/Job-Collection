@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SpringSecurityUtils;
+import me.jobcollection.modules.system.domain.Dept;
 import me.jobcollection.modules.system.domain.Job;
 import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobVo;
 import me.jobcollection.modules.system.domain.vo.Result;
+import me.jobcollection.modules.system.mapper.DeptMapper;
 import me.jobcollection.modules.system.mapper.JobMapper;
 import me.jobcollection.modules.system.service.EmailService;
 import me.jobcollection.modules.system.service.FileService;
@@ -38,6 +40,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
     private final JobMapper jobMapper;
+    private final DeptMapper deptMapper;
     private final JobLogService jobLogService;
     private final FileService fileService;
     private final EmailService emailService;
@@ -142,6 +145,39 @@ public class JobServiceImpl implements JobService {
             EmailVo emailVo = jobLogService.sendEmail(jobLogDto.getJobId(), newPath, currentUser);
             emailService.send(emailVo);
         }
+    }
+
+    @Override
+    public Result updateJob(JobDto jobDto) {
+        Job job = new Job();
+        job.setJobId(jobDto.getJobId());
+        job.setJobName(jobDto.getJobName());
+        job.setDeadline(jobDto.getDeadline());
+        job.setTemplateId(jobDto.getTemplateId());
+        job.setCourseId(jobDto.getCourseId());
+        jobMapper.updateById(job);
+        // 如果部门不相同 就要修改
+        Dept dept = deptMapper.queryJobDeptByJobId(jobDto.getJobId());
+        if (!dept.getId().equals(jobDto.getDeptId())) {
+            jobMapper.updateJobFromDept(jobDto.getJobId(), jobDto.getDeptId());
+        }
+        return Result.success(null);
+    }
+
+    /**
+     * 作业删除以后 历史提交怎么处理
+     *
+     * @param jobDto
+     * @return
+     */
+    @Override
+    public Result deleteJob(JobDto jobDto) {
+        jobMapper.deleteById(jobDto.getJobId());
+        jobMapper.deleteJobFromDept(jobDto.getJobId());
+
+        /*删除所有提交*/
+        jobLogService.deleteLogByJobId(jobDto.getJobId());
+        return Result.success(null);
     }
 
     private List<JobVo> convertList(List<JobDto> jobList, boolean status) {

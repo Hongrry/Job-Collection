@@ -75,4 +75,14 @@ public class JobController {
         // 关联
         return Result.success(null);
     }
+
+    @PutMapping
+    public Result updateJob(@RequestBody JobDto jobDto) {
+        return jobService.updateJob(jobDto);
+    }
+
+    @DeleteMapping
+    public Result deleteJob(@RequestBody JobDto jobDto) {
+        return jobService.deleteJob(jobDto);
+    }
 }

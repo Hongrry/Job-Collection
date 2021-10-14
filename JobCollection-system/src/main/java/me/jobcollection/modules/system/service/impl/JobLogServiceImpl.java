@@ -115,6 +115,11 @@ public class JobLogServiceImpl implements JobLogService {
         jobLogMapper.insert(jobLog);
     }
 
+    @Override
+    public void deleteLogByJobId(Long jobId) {
+        jobLogMapper.deleteLogByJobId(jobId);
+    }
+
     private List<JobLogVo> convertList(List<JobLogDetail> list) {
         ArrayList<JobLogVo> jobLogVos = new ArrayList<>(list.size());
         for (JobLogDetail detail : list) {

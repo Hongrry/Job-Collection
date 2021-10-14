@@ -30,4 +30,9 @@ public interface JobLogMapper extends BaseMapper<JobLog> {
                                          Integer day,
                                          Boolean success,
                                          String keyword);
+
+    /**
+     * @param jobId
+     */
+    void deleteLogByJobId(Long jobId);
 }

@@ -55,4 +55,11 @@ public interface JobLogService {
      * @param description
      */
     void addErrorLog(Long jobId, String description);
+
+    /**
+     * 删除作业记录
+     *
+     * @param jobId
+     */
+    void deleteLogByJobId(Long jobId);
 }

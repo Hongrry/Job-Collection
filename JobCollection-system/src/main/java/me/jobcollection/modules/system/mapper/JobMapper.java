@@ -52,4 +52,19 @@ public interface JobMapper extends BaseMapper<Job> {
      * @param jobId
      */
     void addJobToDept(Long deptId, Long jobId);
+
+    /**
+     * 删除关联
+     *
+     * @param jobId
+     */
+    void deleteJobFromDept(Long jobId);
+
+    /**
+     * 更新关联
+     *
+     * @param jobId
+     * @param deptId
+     */
+    void updateJobFromDept(Long jobId, Long deptId);
 }

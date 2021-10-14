@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.jobcollection.modules.system.mapper.DeptMapper">
+    <select id="queryJobDeptByJobId" resultType="me.jobcollection.modules.system.domain.Dept">
+        SELECT d.id,
+               d.name
+        FROM sys_dept d
+                 LEFT JOIN sys_dept_job dj ON dj.dept_id = d.id
+        WHERE dj.job_id = #{jobId}
+    </select>
+</mapper>

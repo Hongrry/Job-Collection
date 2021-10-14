@@ -6,6 +6,16 @@
         insert into sys_dept_job
         values (#{deptId}, #{jobId});
     </insert>
+    <update id="updateJobFromDept">
+        update sys_dept_job sdj
+        set sdj.dept_id = #{deptId}
+        where sdj.job_Id = #{jobId};
+    </update>
+    <delete id="deleteJobFromDept">
+        delete
+        from sys_dept_job sdj
+        where sdj.job_id = #{jobId};
+    </delete>
     <select id="queryJobDetailById" resultType="me.jobcollection.modules.system.service.dto.JobDto">
         SELECT sys_job.*, sys_course.course_name
         FROM sys_job,
@@ -17,7 +27,8 @@
         SELECT
         DISTINCT
         sys_job.*,
-        sys_course.course_name
+        sys_course.course_name,
+        sys_dept_job.dept_id
         FROM
         sys_dept_user,
         sys_dept_job,

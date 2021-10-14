@@ -79,4 +79,20 @@ public interface JobService {
      */
     @Async("taskExecutor")
     void submitJob(JobLogDto jobLogDto, JwtUserDto currentUser);
+
+    /**
+     * 更新作业
+     *
+     * @param jobDto
+     * @return
+     */
+    Result updateJob(JobDto jobDto);
+
+    /**
+     * 删除作业
+     *
+     * @param jobDto
+     * @return
+     */
+    Result deleteJob(JobDto jobDto);
 }

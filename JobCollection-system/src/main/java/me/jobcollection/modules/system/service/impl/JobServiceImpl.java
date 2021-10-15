@@ -12,6 +12,7 @@ import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobVo;
 import me.jobcollection.modules.system.domain.vo.Result;
+import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.mapper.DeptMapper;
 import me.jobcollection.modules.system.mapper.JobMapper;
 import me.jobcollection.modules.system.service.EmailService;
@@ -149,6 +150,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Result updateJob(JobDto jobDto) {
+        checkJob(jobDto.getJobId());
         Job job = new Job();
         job.setJobId(jobDto.getJobId());
         job.setJobName(jobDto.getJobName());
@@ -164,20 +166,26 @@ public class JobServiceImpl implements JobService {
         return Result.success(null);
     }
 
-    /**
-     * 作业删除以后 历史提交怎么处理
-     *
-     * @param jobDto
-     * @return
-     */
     @Override
-    public Result deleteJob(JobDto jobDto) {
-        jobMapper.deleteById(jobDto.getJobId());
-        jobMapper.deleteJobFromDept(jobDto.getJobId());
+    public void deleteJob(Long id) {
+        checkJob(id);
+        jobMapper.deleteById(id);
+        jobMapper.deleteJobFromDept(id);
 
         /*删除所有提交*/
-        jobLogService.deleteLogByJobId(jobDto.getJobId());
-        return Result.success(null);
+        jobLogService.deleteLogByJobId(id);
+    }
+
+    @Override
+    public void deleteBatchJob(List<Long> ids) {
+        for (Long id : ids) {
+            deleteJob(id);
+        }
+    }
+
+    @Override
+    public List<Job> selectJobByCourseId(Long courseId) {
+        return jobMapper.selectJobByCourseId(courseId);
     }
 
     private List<JobVo> convertList(List<JobDto> jobList, boolean status) {
@@ -217,5 +225,12 @@ public class JobServiceImpl implements JobService {
             jobVo.setIsExpire(true);
         }
         return jobVo;
+    }
+
+    private void checkJob(Long jobId) {
+        Job job = jobMapper.selectById(jobId);
+        if (job == null) {
+            throw new BadRequestException("作业不存在");
+        }
     }
 }

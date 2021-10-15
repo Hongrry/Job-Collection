@@ -17,17 +17,17 @@
         where sdj.job_id = #{jobId};
     </delete>
     <select id="queryJobDetailById" resultType="me.jobcollection.modules.system.service.dto.JobDto">
-        SELECT sys_job.*, sys_course.course_name
+        SELECT sys_job.*, sys_course.name
         FROM sys_job,
              sys_course
         WHERE sys_job.job_id = #{jobId}
-          AND sys_job.course_id = sys_course.course_id
+          AND sys_job.course_id = sys_course.id
     </select>
     <select id="listJob" resultType="me.jobcollection.modules.system.service.dto.JobDto">
         SELECT
         DISTINCT
         sys_job.*,
-        sys_course.course_name,
+        sys_course.name,
         sys_dept_job.dept_id
         FROM
         sys_dept_user,
@@ -37,7 +37,7 @@
         <where>
             AND sys_dept_user.dept_id=sys_dept_job.dept_id
             AND sys_dept_job.job_id=sys_job.job_id
-            AND sys_job.course_id=sys_course.course_id
+            AND sys_job.course_id=sys_course.id
             <if test="userId != null">
                 AND sys_dept_user.user_id=#{userId}
             </if>
@@ -59,8 +59,17 @@
                 WHERE job_logs.job_id = sys_job.job_id) =0
             </if>
             <if test="courseName != null">
-                AND sys_course.course_name=#{courseName}
+                AND sys_course.name=#{courseName}
             </if>
         </where>
+    </select>
+    <select id="selectJobByCourseId" resultType="me.jobcollection.modules.system.domain.Job">
+        SELECT j.job_name,
+               j.job_id,
+               j.deadline,
+               j.course_id,
+               j.begin_time
+        FROM sys_job j
+        WHERE j.course_id = #{courseId}
     </select>
 </mapper>

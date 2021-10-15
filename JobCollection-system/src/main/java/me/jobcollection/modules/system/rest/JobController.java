@@ -26,7 +26,7 @@ import java.util.HashMap;
 public class JobController {
     private final JobService jobService;
 
-    @GetMapping("listJob")
+    @GetMapping
     public Result listJob(JobQueryCriteria criteria) {
         IPage<JobDto> page = jobService.listJobDetail(criteria);
 
@@ -83,6 +83,8 @@ public class JobController {
 
     @DeleteMapping
     public Result deleteJob(@RequestBody JobDto jobDto) {
-        return jobService.deleteJob(jobDto);
+        // 查询作业是否存在
+        jobService.deleteJob(jobDto.getJobId());
+        return Result.success(null);
     }
 }

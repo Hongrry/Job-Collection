@@ -67,4 +67,12 @@ public interface JobMapper extends BaseMapper<Job> {
      * @param deptId
      */
     void updateJobFromDept(Long jobId, Long deptId);
+
+    /**
+     * 根据课程Id查询作业
+     *
+     * @param courseId
+     * @return
+     */
+    List<Job> selectJobByCourseId(Long courseId);
 }

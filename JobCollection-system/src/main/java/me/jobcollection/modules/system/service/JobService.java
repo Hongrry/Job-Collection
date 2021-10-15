@@ -9,6 +9,8 @@ import me.jobcollection.modules.system.service.dto.JobLogDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import org.springframework.scheduling.annotation.Async;
 
+import java.util.List;
+
 /**
  * @author Hongrry
  * @create 2021-10-04 16:01
@@ -91,8 +93,24 @@ public interface JobService {
     /**
      * 删除作业
      *
-     * @param jobDto
+     * @param id
      * @return
      */
-    Result deleteJob(JobDto jobDto);
+    void deleteJob(Long id);
+
+    /**
+     * 批量删除作业
+     *
+     * @param ids
+     * @return
+     */
+    void deleteBatchJob(List<Long> ids);
+
+    /**
+     * 通过课程ID查询作业
+     *
+     * @param courseId
+     * @return
+     */
+    List<Job> selectJobByCourseId(Long courseId);
 }

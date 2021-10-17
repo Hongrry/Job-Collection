@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
+import me.jobcollection.modules.security.utils.SecurityUtils;
 import me.jobcollection.modules.system.domain.Course;
 import me.jobcollection.modules.system.domain.Dept;
 import me.jobcollection.modules.system.domain.Job;
@@ -106,6 +107,8 @@ public class JobServiceImpl implements JobService {
             // 邮件通知
             EmailVo emailVo = jobLogService.sendEmail(jobDto, newPath, currentUser);
             emailService.send(emailVo);
+        } else {
+            throw new BadRequestException("作业已经截止提交");
         }
     }
 
@@ -173,15 +176,11 @@ public class JobServiceImpl implements JobService {
         JobVo jobVo = new JobVo();
         BeanUtils.copyProperties(job, jobVo);
 
-        // 转换时间格式
-        jobVo.setJobName(job.getJobName());
         // 获取当前学号
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUserDto principal = (JwtUserDto) authentication.getPrincipal();
-
+        Long userId = SecurityUtils.getUserId();
         if (status) {
             // 设置作业状态
-            JobLog jobLog = jobLogService.queryJobLog(principal.getUser().getId(), job.getJobId(), true);
+            JobLog jobLog = jobLogService.queryJobLog(userId, job.getJobId(), true);
             if (jobLog != null && jobLog.getSuccess()) {
                 // 成功提交
                 jobVo.setStatus(JobStatus.SUBMITTED.getCode());
@@ -189,11 +188,6 @@ public class JobServiceImpl implements JobService {
                 // 没有成功的提交
                 jobVo.setStatus(JobStatus.NONE.getCode());
             }
-        }
-        long currentTimeMillis = System.currentTimeMillis();
-        if (currentTimeMillis > job.getDeadline()) {
-            // 已过截止日期
-            jobVo.setIsExpire(true);
         }
         return jobVo;
     }

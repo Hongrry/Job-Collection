@@ -15,5 +15,4 @@ public class JobVo {
     private String desc;
     private Integer status;
     private String courseName;
-    private Boolean isExpire;
 }

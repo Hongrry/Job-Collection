@@ -7,6 +7,7 @@ import me.jobcollection.modules.system.domain.Job;
 import me.jobcollection.modules.system.service.dto.JobDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -75,4 +76,30 @@ public interface JobMapper extends BaseMapper<Job> {
      * @return
      */
     List<Job> selectJobByCourseId(Long courseId);
+
+    IPage<JobDto> selectJobDetail(Page<JobDto> page,
+                                  @Param("keyword") String keyword,
+                                  @Param("year") Integer year,
+                                  @Param("month") Integer month,
+                                  @Param("courseName") String courseName);
+
+    /**
+     * 分页条件查询用户的作业
+     * @param page
+     * @param userId
+     * @param keyword
+     * @param year
+     * @param month
+     * @param success
+     * @param courseName
+     * @return
+     */
+    IPage<JobDto> selectJobDetailById(Page<JobDto> page,
+                                      @Param("userId") Long userId,
+                                      @Param("keyword") String keyword,
+                                      @Param("year") Integer year,
+                                      @Param("month") Integer month,
+                                      @Param("success") Boolean success,
+                                      @Param("courseName") String courseName);
+
 }

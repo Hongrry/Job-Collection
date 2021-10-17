@@ -29,9 +29,10 @@ public interface JobService {
      * 根据 id 查询用户的作业
      *
      * @param jobQueryCriteria
+     * @param userId
      * @return
      */
-    Result listJobDetailByUserId(JobQueryCriteria jobQueryCriteria);
+    Result listJobDetailByUserId(JobQueryCriteria jobQueryCriteria, Long userId);
 
     /**
      * 根据 条件 查询作业
@@ -79,7 +80,6 @@ public interface JobService {
      * @param jobLogDto
      * @param currentUser
      */
-    @Async("taskExecutor")
     void submitJob(JobLogDto jobLogDto, JwtUserDto currentUser);
 
     /**
@@ -113,4 +113,7 @@ public interface JobService {
      * @return
      */
     List<Job> selectJobByCourseId(Long courseId);
+
+
+    IPage<JobDto> listJobDetails(JobQueryCriteria criteria);
 }

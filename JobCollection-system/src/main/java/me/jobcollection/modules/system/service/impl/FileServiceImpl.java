@@ -1,15 +1,18 @@
 package me.jobcollection.modules.system.service.impl;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.text.StrBuilder;
 import com.upyun.RestManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.jobcollection.config.FileProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SpringSecurityUtils;
+import me.jobcollection.modules.system.domain.Course;
 import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.exception.FileException;
 import me.jobcollection.modules.system.exception.JobSubmitException;
+import me.jobcollection.modules.system.mapper.CourseMapper;
 import me.jobcollection.modules.system.mapper.TemplateMapper;
 import me.jobcollection.modules.system.service.FileService;
 import me.jobcollection.modules.system.service.dto.JobDto;
@@ -34,7 +37,7 @@ import java.util.UUID;
 @Slf4j
 public class FileServiceImpl implements FileService {
     private final RestManager restManager;
-    private final TemplateMapper templateMapper;
+    private final CourseMapper courseMapper;
     private final FileProperties fileProperties;
 
     @Override
@@ -82,23 +85,21 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String handleFile(JobDto jobDto, String url, JwtUserDto currentUser) {
-        // 根据 job id 查询 命名模板
-        String template = templateMapper.selectById(jobDto.getTemplateId()).getTemplate();
+        // 查询命名模板
+        Course course = courseMapper.selectById(jobDto.getCourseId());
+        String template = course.getTemplate();
 
-        // 修改作业名
-        template = template
+
+        StringBuilder builder = new StringBuilder(template
                 .replace("JOBNAME", jobDto.getJobName())
                 .replace("NICKNAME", currentUser.getUser().getNickname())
-                .replace("USERNAME", currentUser.getUsername());
+                .replace("USERNAME", currentUser.getUsername()))
+                .append(".")
+                .append(StringUtils.substringAfterLast(url, "."))
+                .insert(0, course.getName() + File.separator + jobDto.getJobName() + File.separator);
 
-        // 获取后缀
-        String suffix = StringUtils.substringAfterLast(url, ".");
-        // 构建目录
-        String dir = jobDto.getCourseName() + "/" + jobDto.getJobName() + "/";
-
-        String newPath = dir + template + "." + suffix;
         File file = new File(fileProperties.getPath() + url);
-        File newFile = new File(fileProperties.getBaseUploadPath() + newPath);
+        File newFile = new File(fileProperties.getBaseUploadPath() + builder);
         FileInputStream fileInputStream = null;
         try {
             fileInputStream = new FileInputStream(file);
@@ -107,7 +108,6 @@ public class FileServiceImpl implements FileService {
         }
         FileUtil.writeFromStream(fileInputStream, newFile);
 
-        // upload(file, newPath, jobDto.getJobId());
-        return newPath;
+        return builder.toString();
     }
 }

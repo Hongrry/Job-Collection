@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SpringSecurityUtils;
+import me.jobcollection.modules.system.domain.Course;
 import me.jobcollection.modules.system.domain.Dept;
 import me.jobcollection.modules.system.domain.Job;
 import me.jobcollection.modules.system.domain.JobLog;
@@ -13,6 +14,7 @@ import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobVo;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.exception.BadRequestException;
+import me.jobcollection.modules.system.mapper.CourseMapper;
 import me.jobcollection.modules.system.mapper.DeptMapper;
 import me.jobcollection.modules.system.mapper.JobMapper;
 import me.jobcollection.modules.system.service.EmailService;
@@ -42,6 +44,7 @@ import java.util.List;
 public class JobServiceImpl implements JobService {
     private final JobMapper jobMapper;
     private final DeptMapper deptMapper;
+    private final CourseMapper courseMapper;
     private final JobLogService jobLogService;
     private final FileService fileService;
     private final EmailService emailService;
@@ -62,16 +65,22 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Result listJobDetailByUserId(JobQueryCriteria jobQueryCriteria) {
-        jobQueryCriteria.setUserId(SpringSecurityUtils.getCurrentUser().getUser().getId());
+    public Result listJobDetailByUserId(JobQueryCriteria criteria, Long userId) {
+        Page<JobDto> page = new Page<>(criteria.getPage(), criteria.getPageSize());
+        IPage<JobDto> iPage = jobMapper.selectJobDetailById(page,
+                userId,
+                criteria.getKeyword(),
+                criteria.getYear(),
+                criteria.getMonth(),
+                criteria.getSuccess(),
+                criteria.getCourseName()
+        );
 
-        IPage<JobDto> detail = listJobDetail(jobQueryCriteria);
-
-        List<JobVo> jobVos = convertList(detail.getRecords(), true);
+        List<JobVo> jobVos = convertList(iPage.getRecords(), true);
 
         HashMap<String, Object> map = new HashMap<String, Object>(2) {
             {
-                put("total", detail.getTotal());
+                put("total", iPage.getTotal());
                 put("list", jobVos);
             }
         };
@@ -124,7 +133,11 @@ public class JobServiceImpl implements JobService {
         job.setJobName(jobDto.getJobName());
         job.setBeginTime(System.currentTimeMillis());
         job.setDeadline(jobDto.getDeadline());
-        job.setTemplateId(jobDto.getTemplateId());
+        // 检查课程是否存在
+        Course course = courseMapper.selectById(jobDto.getCourseId());
+        if (course == null) {
+            throw new BadRequestException("课程不存在");
+        }
         job.setCourseId(jobDto.getCourseId());
         jobMapper.insert(job);
 
@@ -135,7 +148,7 @@ public class JobServiceImpl implements JobService {
     public void submitJob(JobLogDto jobLogDto, JwtUserDto currentUser) {
         // 查询作业的详细
         JobDto jobDto = queryJobDetailById(jobLogDto.getJobId());
-        // 作业是否截止
+        // 作业是否截止 (添加管理员判断 管理员可以直接提交 ，后期实现定时任务，将本地作业提交到云存储)
         if (jobDto.getDeadline() > System.currentTimeMillis()) {
 
             // 处理文件
@@ -143,7 +156,7 @@ public class JobServiceImpl implements JobService {
             // 更新数据库
             jobLogService.addSuccessLog(jobDto.getJobId(), newPath, currentUser);
             // 邮件通知
-            EmailVo emailVo = jobLogService.sendEmail(jobLogDto.getJobId(), newPath, currentUser);
+            EmailVo emailVo = jobLogService.sendEmail(jobDto, newPath, currentUser);
             emailService.send(emailVo);
         }
     }
@@ -155,7 +168,6 @@ public class JobServiceImpl implements JobService {
         job.setJobId(jobDto.getJobId());
         job.setJobName(jobDto.getJobName());
         job.setDeadline(jobDto.getDeadline());
-        job.setTemplateId(jobDto.getTemplateId());
         job.setCourseId(jobDto.getCourseId());
         jobMapper.updateById(job);
         // 如果部门不相同 就要修改
@@ -169,6 +181,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public void deleteJob(Long id) {
         checkJob(id);
+
         jobMapper.deleteById(id);
         jobMapper.deleteJobFromDept(id);
 
@@ -186,6 +199,17 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> selectJobByCourseId(Long courseId) {
         return jobMapper.selectJobByCourseId(courseId);
+    }
+
+    @Override
+    public IPage<JobDto> listJobDetails(JobQueryCriteria criteria) {
+
+        Page<JobDto> page = new Page<>(criteria.getPage(), criteria.getPageSize());
+        return jobMapper.selectJobDetail(page,
+                criteria.getKeyword(),
+                criteria.getYear(),
+                criteria.getMonth(),
+                criteria.getCourseName());
     }
 
     private List<JobVo> convertList(List<JobDto> jobList, boolean status) {

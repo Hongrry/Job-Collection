@@ -14,8 +14,6 @@ import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-
 /**
  * @author Hongrry
  * @create 2021-10-04 15:38
@@ -23,25 +21,18 @@ import java.util.HashMap;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("job")
-public class JobController {
+public class JobController extends BaseController {
     private final JobService jobService;
 
     @GetMapping
-    public Result listJob(JobQueryCriteria criteria) {
-        IPage<JobDto> page = jobService.listJobDetail(criteria);
-
-        HashMap<String, Object> map = new HashMap<String, Object>(2) {
-            {
-                put("total", page.getTotal());
-                put("list", page.getRecords());
-            }
-        };
-        return Result.success(map);
+    public Result listJobDetail(JobQueryCriteria criteria) {
+        IPage<JobDto> page = jobService.listJobDetails(criteria);
+        return handlerPageData(page);
     }
 
     @GetMapping("listJobByUserId")
     public Result listJobDetailByUserId(JobQueryCriteria criteria) {
-        return jobService.listJobDetailByUserId(criteria);
+        return jobService.listJobDetailByUserId(criteria, getCurrentUserId());
     }
 
 
@@ -57,19 +48,19 @@ public class JobController {
      */
     @PostMapping("submitJob")
     public Result submitJob(@Validated @RequestBody JobLogDto jobLogDto) {
-        // 当前用户
-        JwtUserDto currentUser = SpringSecurityUtils.getCurrentUser();
-        jobService.submitJob(jobLogDto, currentUser);
+        jobService.submitJob(jobLogDto, getCurrentLoginUser());
         return Result.success(null);
     }
 
-    @PostMapping("publishJob")
-    public Result publishJob(@RequestBody JobDto jobDto) {
-        JwtUserDto currentUser = SpringSecurityUtils.getCurrentUser();
+    /**
+     * deptID 要不要剥离
+     *
+     * @param jobDto
+     * @return
+     */
+    @PostMapping
+    public Result addJob(@RequestBody JobDto jobDto) {
 
-        if (currentUser == null || currentUser.getAuthorities().size() == 0) {
-            throw new BadRequestException("非法访问");
-        }
         // 更新
         jobService.publishJob(jobDto);
         // 关联
@@ -83,7 +74,6 @@ public class JobController {
 
     @DeleteMapping
     public Result deleteJob(@RequestBody JobDto jobDto) {
-        // 查询作业是否存在
         jobService.deleteJob(jobDto.getJobId());
         return Result.success(null);
     }

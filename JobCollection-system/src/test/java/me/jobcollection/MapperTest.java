@@ -40,11 +40,16 @@ public class MapperTest {
     @Test
     public void testListJob() {
         Page<JobDto> page = new Page<>(1, 10);
-        IPage<JobLogDetail> iPage = jobLogMapper.listJobLogDetail(page,
+        IPage<JobDto> iPage = jobMapper.selectJobDetailById(page,
                 1190113189L,
-                2021, 10, 7, null, null);
-        System.out.println(iPage.getTotal());
-        for (JobLogDetail record : iPage.getRecords()) {
+                null,
+                2021,
+                10,
+                false,
+                null
+        );
+        for (JobDto record : iPage.getRecords()) {
+
             System.out.println(record);
         }
     }

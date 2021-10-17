@@ -19,10 +19,10 @@
                c.remark
         FROM sys_course c
         <where>
-            <if test="keyword != null">
+            <if test="keyword != null and keyword.length>0">
                 AND c.name LIKE concat('%',#{keyword},'%')
             </if>
-            <if test="teacher != null">
+            <if test="teacher != null and teacher.length>0">
                 AND c.teacher=#{teacher}
             </if>
         </where>

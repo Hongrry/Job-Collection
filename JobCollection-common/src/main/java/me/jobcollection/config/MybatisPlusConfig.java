@@ -17,6 +17,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class MybatisPlusConfig {
+
     // 最新版
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {

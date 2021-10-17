@@ -20,5 +20,4 @@ public class Job {
     private Long beginTime;
     private Long deadline;
     private Long courseId;
-    private Long templateId;
 }

@@ -92,8 +92,7 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public EmailVo sendEmail(Long jobId, String path, JwtUserDto currentUser) {
-        JobDto jobDto = jobMapper.queryJobDetailById(jobId);
+    public EmailVo sendEmail(JobDto jobDto, String path, JwtUserDto currentUser) {
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
         Template template = engine.getTemplate("email/taskAlarm.ftl");
         String content = template.render(Dict.create()

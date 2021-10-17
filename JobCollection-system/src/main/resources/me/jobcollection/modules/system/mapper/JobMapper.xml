@@ -2,6 +2,15 @@
 <!--MyBatis配置文件-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.jobcollection.modules.system.mapper.JobMapper">
+    <resultMap id="jobDetail" type="me.jobcollection.modules.system.service.dto.JobDto">
+        <result column="job_id" property="jobId"/>
+        <result column="job_name" property="jobName"/>
+        <result column="name" property="courseName"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="deadline" property="deadline"/>
+        <result column="id" property="courseId"/>
+        <result column="dept_id" property="deptId"/>
+    </resultMap>
     <insert id="addJobToDept">
         insert into sys_dept_job
         values (#{deptId}, #{jobId});
@@ -16,12 +25,16 @@
         from sys_dept_job sdj
         where sdj.job_id = #{jobId};
     </delete>
-    <select id="queryJobDetailById" resultType="me.jobcollection.modules.system.service.dto.JobDto">
-        SELECT sys_job.*, sys_course.name
-        FROM sys_job,
-             sys_course
-        WHERE sys_job.job_id = #{jobId}
-          AND sys_job.course_id = sys_course.id
+    <select id="queryJobDetailById" resultMap="jobDetail">
+        SELECT sj.job_id,
+               sj.begin_time,
+               sj.deadline,
+               sc.id,
+               sj.job_name,
+               sc.name
+        FROM sys_job sj
+        left join sys_course sc on sj.course_id = sc.id
+        WHERE sj.job_id = #{jobId}
     </select>
     <select id="listJob" resultType="me.jobcollection.modules.system.service.dto.JobDto">
         SELECT
@@ -71,5 +84,62 @@
                j.begin_time
         FROM sys_job j
         WHERE j.course_id = #{courseId}
+    </select>
+    <select id="selectJobDetail" resultMap="jobDetail">
+        SELECT j.job_id,
+               j.job_name,
+               c.name,
+               c.id,
+               j.begin_time,
+               j.deadline,
+               c.id,
+               sdj.dept_id
+        FROM sys_job j
+        LEFT JOIN sys_course c ON j.course_id = c.id
+        LEFT JOIN sys_dept_job sdj on j.job_id = sdj.job_id
+        <where>
+            <if test="year != null and month != null ">
+                AND (FROM_UNIXTIME(j.deadline / 1000, '%m') = #{month}
+                AND FROM_UNIXTIME(j.deadline / 1000, '%Y') = #{year})
+            </if>
+            <if test="keyword != null">
+                AND j.job_name LIKE concat('%',#{keyword},'%')
+            </if>
+            <if test="courseName != null">
+                AND c.name=#{courseName}
+            </if>
+        </where>
+    </select>
+    <select id="selectJobDetailById" resultMap="jobDetail">
+        SELECT  j.job_id,
+                j.job_name,
+                j.begin_time,
+                j.deadline,
+                c.name
+        FROM sys_job j
+            LEFT JOIN sys_course c ON j.course_id=c.id
+            LEFT JOIN sys_dept_job dj ON dj.job_id=j.job_id
+            LEFT JOIN sys_dept_user du ON du.dept_id=dj.dept_id
+        WHERE du.user_id=#{userId}
+        <if test="year != null and month != null ">
+            AND (FROM_UNIXTIME(j.deadline / 1000, '%m') = #{month}
+            AND FROM_UNIXTIME(j.deadline / 1000, '%Y') = #{year})
+        </if>
+        <if test="keyword != null">
+            AND j.job_name LIKE concat('%',#{keyword},'%')
+        </if>
+        <if test="success == true">
+            AND (SELECT count(*)
+            FROM job_logs jl
+            WHERE jl.job_id = j.job_id) !=0
+        </if>
+        <if test="success == false">
+            AND (SELECT count(*)
+            FROM job_logs jl
+            WHERE jl.job_id = j.job_id) =0
+        </if>
+        <if test="courseName != null">
+            AND c.name=#{courseName}
+        </if>
     </select>
 </mapper>

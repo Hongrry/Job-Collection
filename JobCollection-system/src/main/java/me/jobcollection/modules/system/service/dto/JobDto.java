@@ -14,6 +14,5 @@ public class JobDto {
     private Long deadline;
     private Long courseId;
     private String courseName;
-    private Long templateId;
     private Long deptId;
 }

@@ -5,6 +5,7 @@ import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobLogVo;
 import me.jobcollection.modules.system.domain.vo.Result;
+import me.jobcollection.modules.system.service.dto.JobDto;
 import me.jobcollection.modules.system.service.dto.JobLogCriteria;
 import me.jobcollection.modules.system.service.dto.JobLogQueryCriteria;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
@@ -46,7 +47,7 @@ public interface JobLogService {
      * @param path
      * @return
      */
-    EmailVo sendEmail(Long jobId, String path, JwtUserDto currentUser);
+    EmailVo sendEmail(JobDto jobDto, String path, JwtUserDto currentUser);
 
     /**
      * 添加错误记录

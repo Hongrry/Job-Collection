@@ -31,7 +31,6 @@ public class ServiceTest {
         JobDto jobDto = new JobDto();
         jobDto.setJobName("Test publish");
         jobDto.setDeadline(1633844928000L);
-        jobDto.setTemplateId(1L);
         jobDto.setCourseId(1L);
         jobDto.setDeptId(1L);
 

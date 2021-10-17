@@ -1,6 +1,7 @@
 package me.jobcollection.modules.system.service.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
@@ -9,15 +10,9 @@ import javax.validation.constraints.NotNull;
  * @author Hongrry
  * @create 2021-10-04 16:05
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
-public class JobQueryCriteria {
-    private int page = 1;
-    private int pageSize = 10;
-    private Long userId;
-    private Integer month;
-    private Integer year;
+public class JobQueryCriteria extends BaseQueryCriteria {
     private Boolean success;
     private String courseName;
-    private String keyword;
 }

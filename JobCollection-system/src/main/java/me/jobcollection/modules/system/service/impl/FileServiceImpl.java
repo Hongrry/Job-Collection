@@ -5,11 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.jobcollection.modules.common.config.FileProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
-import me.jobcollection.modules.security.utils.SpringSecurityUtils;
 import me.jobcollection.modules.system.domain.Course;
-import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.exception.FileException;
-import me.jobcollection.modules.system.exception.JobSubmitException;
 import me.jobcollection.modules.system.mapper.CourseMapper;
 import me.jobcollection.modules.system.service.FileService;
 import me.jobcollection.modules.system.service.dto.JobDto;
@@ -36,7 +33,7 @@ public class FileServiceImpl implements FileService {
     private final FileProperties fileProperties;
 
     @Override
-    public String writeLocalFile(MultipartFile file) {
+    public String writeLocalFile(MultipartFile file,UserDto user) {
         // 检查文件大小
         if (file.getSize() > fileProperties.getMaxSize() * 1024 * 1024) {
             throw new FileException("文件大小超过范围");
@@ -54,7 +51,6 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
             throw new FileException("文件上传错误");
         }
-        UserDto user = SpringSecurityUtils.getCurrentUser().getUser();
 
         // 添加到数据库
         log.info(user.getUsername() + user.getNickname() + "提交的文件" + "{}", path);

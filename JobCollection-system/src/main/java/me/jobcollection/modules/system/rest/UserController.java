@@ -1,8 +1,7 @@
 package me.jobcollection.modules.system.rest;
 
 import lombok.RequiredArgsConstructor;
-import me.jobcollection.modules.security.service.dto.JwtUserDto;
-import me.jobcollection.modules.security.utils.SpringSecurityUtils;
+import me.jobcollection.modules.common.rest.BaseController;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.domain.vo.UserVo;
 import me.jobcollection.modules.system.service.UserService;
@@ -20,12 +19,12 @@ import java.lang.ref.ReferenceQueue;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("user")
-public class UserController {
+public class UserController extends BaseController {
     private final UserService userService;
 
     @GetMapping("userInfo")
     public Result getUserInfo() {
-        UserDto user = SpringSecurityUtils.getCurrentUser().getUser();
+        UserDto user = getCurrentUser();
         String avatar = "https://q1.qlogo.cn/g?b=qq&nk=" + StringUtils.substringBeforeLast(user.getEmail(), "@") + "&s=100";
         return Result.success(
                 new UserVo(user.getUsername(),
@@ -36,7 +35,7 @@ public class UserController {
 
     @PostMapping("update")
     public Result updateUserInfo(@RequestBody UserDto user, HttpServletRequest request) {
-        UserDto userDto = SpringSecurityUtils.getCurrentUser().getUser();
+        UserDto userDto = getCurrentUser();
         String token = request.getHeader("Authorization");
         userService.updateUserInfo(user);
         userService.updateUserCache(userDto.getId(), token);

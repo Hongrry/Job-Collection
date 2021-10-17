@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
-import me.jobcollection.modules.security.utils.SpringSecurityUtils;
+import me.jobcollection.modules.security.utils.SecurityUtils;
 import me.jobcollection.modules.system.domain.User;
 import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.mapper.UserMapper;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateUserInfo(UserDto userDto) {
-        UserDto oldInfo = SpringSecurityUtils.getCurrentUser().getUser();
+        UserDto oldInfo = SecurityUtils.getUser();
         boolean flag = false;
         User user = new User();
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto convert(User user) {
-        if (user==null){
+        if (user == null) {
             throw new UsernameNotFoundException("账号不存在");
         }
         UserDto userDto = new UserDto();

@@ -2,9 +2,7 @@ package me.jobcollection.modules.system.service.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
+import me.jobcollection.modules.common.service.dto.BaseQueryCriteria;
 
 /**
  * @author Hongrry

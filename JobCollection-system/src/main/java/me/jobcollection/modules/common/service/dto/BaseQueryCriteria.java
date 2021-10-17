@@ -1,4 +1,4 @@
-package me.jobcollection.modules.system.service.dto;
+package me.jobcollection.modules.common.service.dto;
 
 import lombok.Data;
 

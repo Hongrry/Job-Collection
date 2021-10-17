@@ -38,7 +38,7 @@ public interface JobLogService {
      * @param jobLogQueryCriteria
      * @return
      */
-    Result listJobLogDetail(JobLogQueryCriteria jobLogQueryCriteria);
+    Result listJobLogDetail(JobLogQueryCriteria jobLogQueryCriteria,JwtUserDto currentUser);
 
     /**
      * 发送通知邮件

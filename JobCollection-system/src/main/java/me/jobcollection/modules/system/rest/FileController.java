@@ -1,6 +1,7 @@
 package me.jobcollection.modules.system.rest;
 
 import lombok.RequiredArgsConstructor;
+import me.jobcollection.modules.common.rest.BaseController;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.service.FileService;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("file")
-public class FileController {
+public class FileController extends BaseController {
     private final FileService fileService;
 
     /**
@@ -26,7 +27,7 @@ public class FileController {
      */
     @PostMapping("upload")
     public Result upload(@RequestParam("file") MultipartFile file) {
-        String path = fileService.writeLocalFile(file);
+        String path = fileService.writeLocalFile(file, getCurrentUser());
         return Result.success(path);
     }
 }

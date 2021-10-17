@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.common.config.FileProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
-import me.jobcollection.modules.security.utils.SpringSecurityUtils;
+import me.jobcollection.modules.security.utils.SecurityUtils;
 import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobLogVo;
@@ -64,11 +64,10 @@ public class JobLogServiceImpl implements JobLogService {
     }
 
     @Override
-    public Result listJobLogDetail(JobLogQueryCriteria jobLogQueryCriteria) {
+    public Result listJobLogDetail(JobLogQueryCriteria jobLogQueryCriteria, JwtUserDto currentUser) {
         // 分页
         Page<JobLogDetail> page = new Page<>(jobLogQueryCriteria.getPage(), jobLogQueryCriteria.getPageSize());
 
-        JwtUserDto currentUser = SpringSecurityUtils.getCurrentUser();
         IPage<JobLogDetail> iPage = jobLogMapper.listJobLogDetail(page,
                 currentUser.getUser().getId(),
                 jobLogQueryCriteria.getYear(),
@@ -109,7 +108,7 @@ public class JobLogServiceImpl implements JobLogService {
         jobLog.setDate(System.currentTimeMillis());
         jobLog.setSuccess(false);
         jobLog.setDescription(description);
-        jobLog.setUserId(SpringSecurityUtils.getCurrentUser().getUser().getId());
+        jobLog.setUserId(SecurityUtils.getUserId());
         jobLogMapper.insert(jobLog);
     }
 

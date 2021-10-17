@@ -2,6 +2,7 @@ package me.jobcollection.modules.system.service;
 
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.service.dto.JobDto;
+import me.jobcollection.modules.system.service.dto.UserDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -16,9 +17,10 @@ public interface FileService {
      * 写入本地文件
      *
      * @param file
+     * @param user
      * @return
      */
-    String writeLocalFile(MultipartFile file);
+    String writeLocalFile(MultipartFile file,UserDto user);
 
     /**
      * 上传文件

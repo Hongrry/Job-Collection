@@ -1,6 +1,7 @@
 package me.jobcollection.modules.system.rest;
 
 import lombok.RequiredArgsConstructor;
+import me.jobcollection.modules.common.rest.BaseController;
 import me.jobcollection.modules.system.domain.vo.JobLogVo;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.service.JobLogService;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("logs")
 @RequiredArgsConstructor
-public class JobLogController {
+public class JobLogController extends BaseController {
     private final JobLogService jobLogService;
 
     @GetMapping("listJobHistory")
     public Result listJobHistory(JobLogQueryCriteria criteria) {
 
-        return jobLogService.listJobLogDetail(criteria);
+        return jobLogService.listJobLogDetail(criteria, getCurrentLoginUser());
     }
 }

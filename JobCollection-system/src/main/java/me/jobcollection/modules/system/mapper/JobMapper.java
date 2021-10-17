@@ -19,26 +19,6 @@ import java.util.List;
 @Mapper
 public interface JobMapper extends BaseMapper<Job> {
     /**
-     * 分页条件查询
-     *
-     * @param page
-     * @param userId
-     * @param year
-     * @param month
-     * @param keyword
-     * @param success
-     * @return
-     */
-    IPage<JobDto> listJob(Page<JobDto> page,
-                          Long userId,
-                          Integer year,
-                          Integer month,
-                          String keyword,
-                          Boolean success,
-                          String courseName
-    );
-
-    /**
      * 查询作业 详细
      *
      * @param jobId

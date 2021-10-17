@@ -7,7 +7,6 @@ import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.service.dto.JobDto;
 import me.jobcollection.modules.system.service.dto.JobLogDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
@@ -18,12 +17,12 @@ import java.util.List;
 public interface JobService {
 
     /**
-     * 查询所有的作业
+     * 分页条件查询所有的作业
      *
-     * @param jobQueryCriteria
+     * @param criteria
      * @return
      */
-    IPage<JobDto> listJobDetail(JobQueryCriteria jobQueryCriteria);
+    IPage<JobDto> listJobDetail(JobQueryCriteria criteria);
 
     /**
      * 根据 id 查询用户的作业
@@ -33,31 +32,6 @@ public interface JobService {
      * @return
      */
     Result listJobDetailByUserId(JobQueryCriteria jobQueryCriteria, Long userId);
-
-    /**
-     * 根据 条件 查询作业
-     *
-     * @param jobQueryCriteria 条件
-     * @return
-     */
-    IPage<JobDto> listJob(JobQueryCriteria jobQueryCriteria);
-
-    /**
-     * 根据 用户 id 和日期 查询作业
-     *
-     * @param jobQueryCriteria
-     * @return
-     */
-    Result listUserJobByMonth(JobQueryCriteria jobQueryCriteria);
-
-
-    /**
-     * 根据 id 查询 job
-     *
-     * @param jobId
-     * @return
-     */
-    Job queryJobById(Long jobId);
 
     /**
      * 查询 作业详细
@@ -114,6 +88,4 @@ public interface JobService {
      */
     List<Job> selectJobByCourseId(Long courseId);
 
-
-    IPage<JobDto> listJobDetails(JobQueryCriteria criteria);
 }

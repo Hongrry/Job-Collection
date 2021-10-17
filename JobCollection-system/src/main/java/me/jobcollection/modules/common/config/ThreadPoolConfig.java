@@ -1,4 +1,4 @@
-package me.jobcollection.config;
+package me.jobcollection.modules.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

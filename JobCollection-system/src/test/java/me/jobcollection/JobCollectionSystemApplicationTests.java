@@ -2,17 +2,13 @@ package me.jobcollection;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import com.upyun.UpException;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.service.EmailService;
 import me.jobcollection.modules.system.service.VerifyService;
-import me.jobcollection.utils.RedisUtils;
+import me.jobcollection.modules.common.utils.RedisUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 @SpringBootTest
 class JobCollectionSystemApplicationTests {

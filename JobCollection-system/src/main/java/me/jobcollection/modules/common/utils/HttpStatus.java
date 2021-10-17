@@ -1,4 +1,4 @@
-package me.jobcollection.utils;
+package me.jobcollection.modules.common.utils;
 
 /**
  * @author HONGRRY

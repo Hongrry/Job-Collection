@@ -1,13 +1,12 @@
 package me.jobcollection.modules.system.rest;
 
 import lombok.RequiredArgsConstructor;
+import me.jobcollection.modules.common.rest.BaseController;
 import me.jobcollection.modules.system.domain.Course;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.system.service.CourseService;
 import me.jobcollection.modules.system.service.dto.CourseQueryCriteria;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Hongrry

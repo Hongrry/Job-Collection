@@ -1,11 +1,9 @@
-package me.jobcollection.config;
+package me.jobcollection.modules.common.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.annotation.Id;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**

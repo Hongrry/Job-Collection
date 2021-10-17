@@ -36,46 +36,7 @@
         left join sys_course sc on sj.course_id = sc.id
         WHERE sj.job_id = #{jobId}
     </select>
-    <select id="listJob" resultType="me.jobcollection.modules.system.service.dto.JobDto">
-        SELECT
-        DISTINCT
-        sys_job.*,
-        sys_course.name,
-        sys_dept_job.dept_id
-        FROM
-        sys_dept_user,
-        sys_dept_job,
-        sys_job,
-        sys_course
-        <where>
-            AND sys_dept_user.dept_id=sys_dept_job.dept_id
-            AND sys_dept_job.job_id=sys_job.job_id
-            AND sys_job.course_id=sys_course.id
-            <if test="userId != null">
-                AND sys_dept_user.user_id=#{userId}
-            </if>
-            <if test="year != null and month != null ">
-                AND (FROM_UNIXTIME(sys_job.deadline / 1000, '%m') = #{month}
-                AND FROM_UNIXTIME(sys_job.deadline / 1000, '%Y') = #{year})
-            </if>
-            <if test="keyword != null">
-                AND sys_job.`job_name` LIKE concat('%',#{keyword},'%')
-            </if>
-            <if test="success == true">
-                AND (SELECT count(*)
-                FROM `job_logs`
-                WHERE job_logs.job_id = sys_job.job_id) !=0
-            </if>
-            <if test="success == false">
-                AND (SELECT count(*)
-                FROM `job_logs`
-                WHERE job_logs.job_id = sys_job.job_id) =0
-            </if>
-            <if test="courseName != null">
-                AND sys_course.name=#{courseName}
-            </if>
-        </where>
-    </select>
+
     <select id="selectJobByCourseId" resultType="me.jobcollection.modules.system.domain.Job">
         SELECT j.job_name,
                j.job_id,

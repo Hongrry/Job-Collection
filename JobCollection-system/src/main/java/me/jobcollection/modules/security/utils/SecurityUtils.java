@@ -4,7 +4,7 @@ import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.exception.ServiceException;
 
 import me.jobcollection.modules.system.service.dto.UserDto;
-import me.jobcollection.utils.HttpStatus;
+import me.jobcollection.modules.common.utils.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

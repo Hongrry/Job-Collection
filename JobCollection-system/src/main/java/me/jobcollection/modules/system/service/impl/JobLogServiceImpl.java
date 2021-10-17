@@ -1,6 +1,5 @@
 package me.jobcollection.modules.system.service.impl;
 
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
@@ -10,7 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import me.jobcollection.config.FileProperties;
+import me.jobcollection.modules.common.config.FileProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SpringSecurityUtils;
 import me.jobcollection.modules.system.domain.JobLog;

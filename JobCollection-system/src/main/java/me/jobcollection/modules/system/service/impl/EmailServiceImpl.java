@@ -4,7 +4,7 @@ import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.jobcollection.config.EmailConfigProperties;
+import me.jobcollection.modules.common.config.EmailConfigProperties;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.service.EmailService;
 import org.springframework.scheduling.annotation.Async;

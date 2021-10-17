@@ -1,4 +1,4 @@
-package me.jobcollection.utils.enums;
+package me.jobcollection.modules.common.utils.enums;
 
 import lombok.Getter;
 import lombok.Setter;

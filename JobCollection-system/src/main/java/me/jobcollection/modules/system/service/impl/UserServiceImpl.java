@@ -10,7 +10,7 @@ import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.mapper.UserMapper;
 import me.jobcollection.modules.system.service.UserService;
 import me.jobcollection.modules.system.service.dto.UserDto;
-import me.jobcollection.utils.RedisUtils;
+import me.jobcollection.modules.common.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

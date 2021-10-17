@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.jobcollection.config;
+package me.jobcollection.modules.common.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

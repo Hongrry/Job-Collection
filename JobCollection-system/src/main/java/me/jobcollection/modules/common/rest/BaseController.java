@@ -1,4 +1,4 @@
-package me.jobcollection.modules.system.rest;
+package me.jobcollection.modules.common.rest;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;

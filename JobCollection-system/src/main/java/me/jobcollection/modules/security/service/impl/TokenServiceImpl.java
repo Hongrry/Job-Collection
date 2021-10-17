@@ -7,7 +7,7 @@ import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.JwtUtils;
 import me.jobcollection.modules.security.service.TokenService;
 import me.jobcollection.modules.system.service.UserService;
-import me.jobcollection.utils.RedisUtils;
+import me.jobcollection.modules.common.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

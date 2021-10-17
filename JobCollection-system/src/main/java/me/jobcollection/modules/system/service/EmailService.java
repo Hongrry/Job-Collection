@@ -1,6 +1,5 @@
 package me.jobcollection.modules.system.service;
 
-import me.jobcollection.config.EmailConfigProperties;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 
 /**

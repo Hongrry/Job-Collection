@@ -1,6 +1,5 @@
 package me.jobcollection.modules.system.service.impl;
 
-import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import me.jobcollection.modules.system.service.dto.JobDto;
 import me.jobcollection.modules.system.service.dto.JobLogDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import me.jobcollection.modules.system.service.dto.UserDto;
-import me.jobcollection.utils.enums.JobStatus;
+import me.jobcollection.modules.common.utils.enums.JobStatus;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,20 +48,6 @@ public class JobServiceImpl implements JobService {
     private final FileService fileService;
     private final EmailService emailService;
 
-    @Override
-    public IPage<JobDto> listJobDetail(JobQueryCriteria jobQueryCriteria) {
-        Page<JobDto> page = new Page<>(jobQueryCriteria.getPage(), jobQueryCriteria.getPageSize());
-
-        IPage<JobDto> detail = jobMapper.listJob(page,
-                jobQueryCriteria.getUserId(),
-                jobQueryCriteria.getYear(),
-                jobQueryCriteria.getMonth(),
-                jobQueryCriteria.getKeyword(),
-                jobQueryCriteria.getSuccess(),
-                jobQueryCriteria.getCourseName()
-        );
-        return detail;
-    }
 
     @Override
     public Result listJobDetailByUserId(JobQueryCriteria criteria, Long userId) {
@@ -85,41 +70,6 @@ public class JobServiceImpl implements JobService {
             }
         };
         return Result.success(map);
-    }
-
-    @Override
-    public IPage<JobDto> listJob(JobQueryCriteria jobQueryCriteria) {
-        UserDto user = SpringSecurityUtils.getCurrentUser().getUser();
-        Page<JobDto> page = new Page<>(jobQueryCriteria.getPage(), jobQueryCriteria.getPageSize());
-
-        return jobMapper.listJob(page, user.getId(),
-                jobQueryCriteria.getYear(),
-                jobQueryCriteria.getMonth(),
-                jobQueryCriteria.getKeyword(),
-                jobQueryCriteria.getSuccess(),
-                null);
-    }
-
-    @Override
-    public Result listUserJobByMonth(JobQueryCriteria jobQueryCriteria) {
-
-        // 查询用户本月的所有 Job
-        IPage<JobDto> page = listJob(jobQueryCriteria);
-        List<JobVo> finalJobVos = convertList(page.getRecords(), true);
-
-        HashMap<String, Object> map = new HashMap<String, Object>(2) {
-            {
-                put("total", page.getTotal());
-                put("list", finalJobVos);
-            }
-        };
-
-        return Result.success(map);
-    }
-
-    @Override
-    public Job queryJobById(Long jobId) {
-        return jobMapper.selectById(jobId);
     }
 
     @Override
@@ -202,8 +152,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public IPage<JobDto> listJobDetails(JobQueryCriteria criteria) {
-
+    public IPage<JobDto> listJobDetail(JobQueryCriteria criteria) {
         Page<JobDto> page = new Page<>(criteria.getPage(), criteria.getPageSize());
         return jobMapper.selectJobDetail(page,
                 criteria.getKeyword(),

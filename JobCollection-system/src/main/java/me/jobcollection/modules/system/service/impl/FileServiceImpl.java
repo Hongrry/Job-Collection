@@ -1,11 +1,9 @@
 package me.jobcollection.modules.system.service.impl;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.text.StrBuilder;
-import com.upyun.RestManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.jobcollection.config.FileProperties;
+import me.jobcollection.modules.common.config.FileProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SpringSecurityUtils;
 import me.jobcollection.modules.system.domain.Course;
@@ -13,11 +11,9 @@ import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.exception.FileException;
 import me.jobcollection.modules.system.exception.JobSubmitException;
 import me.jobcollection.modules.system.mapper.CourseMapper;
-import me.jobcollection.modules.system.mapper.TemplateMapper;
 import me.jobcollection.modules.system.service.FileService;
 import me.jobcollection.modules.system.service.dto.JobDto;
 import me.jobcollection.modules.system.service.dto.UserDto;
-import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +32,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class FileServiceImpl implements FileService {
-    private final RestManager restManager;
     private final CourseMapper courseMapper;
     private final FileProperties fileProperties;
 
@@ -68,19 +63,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void upload(File file, String fileName, Long jobId) {
-        byte[] bytes = null;
-        try {
-            bytes = FileUtil.readBytes(file);
-        } catch (Exception e) {
-            throw new JobSubmitException(jobId, "文件损坏, 请重新上传");
-        }
 
-        // 上传
-        try {
-            Response response = restManager.writeFile(fileProperties.getBaseUploadPath() + fileName, bytes, null);
-        } catch (Exception e) {
-            throw new BadRequestException("系统异常, 云存储错误");
-        }
     }
 
     @Override

@@ -1,12 +1,12 @@
 package me.jobcollection.modules.security.rest;
 
 import lombok.RequiredArgsConstructor;
-import me.jobcollection.config.RsaProperties;
+import me.jobcollection.modules.common.config.RsaProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.domain.vo.Result;
 import me.jobcollection.modules.security.service.TokenService;
 import me.jobcollection.modules.security.service.dto.AuthUserDto;
-import me.jobcollection.utils.RsaUtils;
+import me.jobcollection.modules.common.utils.RsaUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

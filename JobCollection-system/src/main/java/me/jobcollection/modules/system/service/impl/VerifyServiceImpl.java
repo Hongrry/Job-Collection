@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.exception.BadRequestException;
 import me.jobcollection.modules.system.service.VerifyService;
-import me.jobcollection.utils.RedisUtils;
+import me.jobcollection.modules.common.utils.RedisUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

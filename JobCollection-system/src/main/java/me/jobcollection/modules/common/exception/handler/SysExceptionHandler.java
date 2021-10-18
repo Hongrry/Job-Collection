@@ -1,10 +1,10 @@
-package me.jobcollection.modules.system.exception.handler;
+package me.jobcollection.modules.common.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import me.jobcollection.modules.common.exception.BadRequestException;
+import me.jobcollection.modules.common.exception.FileException;
+import me.jobcollection.modules.common.exception.JobSubmitException;
 import me.jobcollection.modules.system.domain.vo.Result;
-import me.jobcollection.modules.system.exception.BadRequestException;
-import me.jobcollection.modules.system.exception.FileException;
-import me.jobcollection.modules.system.exception.JobSubmitException;
 import me.jobcollection.modules.system.service.JobLogService;
 import me.jobcollection.modules.common.utils.enums.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;

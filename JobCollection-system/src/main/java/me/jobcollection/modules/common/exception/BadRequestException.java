@@ -1,4 +1,4 @@
-package me.jobcollection.modules.system.exception;
+package me.jobcollection.modules.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

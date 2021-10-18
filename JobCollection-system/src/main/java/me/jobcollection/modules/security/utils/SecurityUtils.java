@@ -1,7 +1,7 @@
 package me.jobcollection.modules.security.utils;
 
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
-import me.jobcollection.modules.system.exception.ServiceException;
+import me.jobcollection.modules.common.exception.ServiceException;
 
 import me.jobcollection.modules.system.service.dto.UserDto;
 import me.jobcollection.modules.common.utils.HttpStatus;

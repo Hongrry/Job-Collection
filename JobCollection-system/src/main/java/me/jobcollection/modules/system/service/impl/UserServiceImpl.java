@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.security.utils.SecurityUtils;
 import me.jobcollection.modules.system.domain.User;
-import me.jobcollection.modules.system.exception.BadRequestException;
+import me.jobcollection.modules.common.exception.BadRequestException;
 import me.jobcollection.modules.system.mapper.UserMapper;
 import me.jobcollection.modules.system.service.UserService;
 import me.jobcollection.modules.system.service.dto.UserDto;

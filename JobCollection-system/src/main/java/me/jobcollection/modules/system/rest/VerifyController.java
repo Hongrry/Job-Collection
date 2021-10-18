@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.common.rest.BaseController;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.Result;
-import me.jobcollection.modules.system.exception.BadRequestException;
+import me.jobcollection.modules.common.exception.BadRequestException;
 import me.jobcollection.modules.system.service.EmailService;
 import me.jobcollection.modules.system.service.VerifyService;
 import me.jobcollection.modules.system.service.dto.UserDto;

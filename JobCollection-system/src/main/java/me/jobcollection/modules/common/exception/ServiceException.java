@@ -1,4 +1,4 @@
-package me.jobcollection.modules.system.exception;
+package me.jobcollection.modules.common.exception;
 
 public final class ServiceException extends RuntimeException
 {

@@ -12,7 +12,7 @@ import me.jobcollection.modules.system.domain.JobLog;
 import me.jobcollection.modules.system.domain.vo.EmailVo;
 import me.jobcollection.modules.system.domain.vo.JobVo;
 import me.jobcollection.modules.system.domain.vo.Result;
-import me.jobcollection.modules.system.exception.BadRequestException;
+import me.jobcollection.modules.common.exception.BadRequestException;
 import me.jobcollection.modules.system.mapper.CourseMapper;
 import me.jobcollection.modules.system.mapper.DeptMapper;
 import me.jobcollection.modules.system.mapper.JobMapper;
@@ -25,8 +25,6 @@ import me.jobcollection.modules.system.service.dto.JobLogDto;
 import me.jobcollection.modules.system.service.dto.JobQueryCriteria;
 import me.jobcollection.modules.common.utils.enums.JobStatus;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

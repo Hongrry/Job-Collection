@@ -42,7 +42,7 @@ public class CourseController extends BaseController {
     }
 
     /**
-     * 只实现了分页查询,条件查询暂不需要
+     * 只实现了分页查询,条件查询暂不需要 理论不需要分页
      * 2021年10月14日19:52:12
      *
      * @param criteria

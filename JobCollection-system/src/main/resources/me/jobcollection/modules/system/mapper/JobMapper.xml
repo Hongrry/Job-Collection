@@ -92,12 +92,14 @@
         <if test="success == true">
             AND (SELECT count(*)
             FROM job_logs jl
-            WHERE jl.job_id = j.job_id) !=0
+            WHERE jl.job_id = j.job_id
+            AND  jl.user_id=#{userId}) !=0
         </if>
         <if test="success == false">
             AND (SELECT count(*)
             FROM job_logs jl
-            WHERE jl.job_id = j.job_id) =0
+            WHERE jl.job_id = j.job_id
+            AND  jl.user_id=#{userId}) =0
         </if>
         <if test="courseName != null">
             AND c.name=#{courseName}

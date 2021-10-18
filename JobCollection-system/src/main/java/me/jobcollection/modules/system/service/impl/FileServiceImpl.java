@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.jobcollection.modules.common.config.FileProperties;
 import me.jobcollection.modules.security.service.dto.JwtUserDto;
 import me.jobcollection.modules.system.domain.Course;
-import me.jobcollection.modules.system.exception.FileException;
+import me.jobcollection.modules.common.exception.FileException;
 import me.jobcollection.modules.system.mapper.CourseMapper;
 import me.jobcollection.modules.system.service.FileService;
 import me.jobcollection.modules.system.service.dto.JobDto;

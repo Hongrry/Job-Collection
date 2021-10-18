@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import me.jobcollection.modules.system.domain.Course;
 import me.jobcollection.modules.system.domain.Job;
-import me.jobcollection.modules.system.exception.BadRequestException;
+import me.jobcollection.modules.common.exception.BadRequestException;
 import me.jobcollection.modules.system.mapper.CourseMapper;
 import me.jobcollection.modules.system.service.CourseService;
 import me.jobcollection.modules.system.service.JobService;
